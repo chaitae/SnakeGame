@@ -6,6 +6,7 @@ using System.Threading;
 using UnityEngine.Events;
 using static System.Net.WebRequestMethods;
 using System.Collections.Generic;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace ChaitaesWeb
 {
@@ -16,7 +17,21 @@ namespace ChaitaesWeb
         public UnityEvent onUsernameExistsRegister;
         public UnityEvent onEmailExistsRegister;
         public static Action<Dictionary<string, int>> onGetScores;
-        Dictionary<string, int> scores = new Dictionary<string, int>();
+        public Dictionary<string, int> scores = new Dictionary<string, int>();
+        [SerializeField]
+        string classicScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
+        [SerializeField]
+        string secureScoreURL = "http://localhost/HighscoreTemplate/SetScore.php";
+        string classicGetScoreURL = "http://localhost/HighscoreTemplate/GetScores.php";
+
+
+        [Tooltip("No need for logging in")]
+        public bool isClassicScoreboard = true;
+
+        public string GetCurrentUserName()
+        {
+            return username;
+        }
 
         public void UpdateUserName(string str)
         {
@@ -40,14 +55,26 @@ namespace ChaitaesWeb
             string hashedPass = Encryption.GenerateSHA256Hash(password, salt);
             StartCoroutine(RegisterHelper(username, hashedPass,salt, email));
         }
-        [ContextMenu("doscore")]
-        public void testSendScore()
+        public void SendClassicScore(int score)
         {
-            SendScore(5);
+            StartCoroutine(SendScoreHelper(score, classicScoreURL));
         }
         public void SendScore(int score)
         {
-            StartCoroutine(SetScoreHelper(score));
+            if(isClassicScoreboard)
+            {
+                StartCoroutine(SendScoreHelper(score, classicScoreURL));
+            }
+            else
+            {
+                StartCoroutine(SendScoreHelper(score, secureScoreURL));
+
+            }
+        }
+        public void GetScore()
+        {
+            StartCoroutine(GetScoresHelper(classicGetScoreURL));
+
         }
         void Login(string username,string password)
         {
@@ -133,13 +160,12 @@ namespace ChaitaesWeb
                 }
             }
         }
-        IEnumerator SetScoreHelper(int score)
+        IEnumerator SendScoreHelper(int score, string urlTemp)
         {
-
             WWWForm form = new WWWForm();
             form.AddField("loginUser", username); //this needs to be a field reflected in the php file
             form.AddField("sentScore", score); //this needs to be a field reflected in the php file
-            url = "http://localhost/HighscoreTemplate/SetScore.php"; 
+            url = urlTemp;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 // Request and wait for the desired page.
@@ -165,10 +191,11 @@ namespace ChaitaesWeb
                 }
             }
         }
-        IEnumerator GetScores()
+        IEnumerator GetScoresHelper(string urlTemp)
         {
             WWWForm form = new WWWForm();
-            url = "http://localhost/HighscoreTemplate/GetScores.php";
+
+            url = urlTemp;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 // Request and wait for the desired page.
@@ -215,9 +242,10 @@ namespace ChaitaesWeb
                         }
                         break;
 
+                    }
                 }
             }
-        }
+        
 
     }
 }

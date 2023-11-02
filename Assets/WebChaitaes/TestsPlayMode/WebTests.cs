@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using ChaitaesWeb;
 
 public class WebTests
 {
@@ -10,6 +11,7 @@ public class WebTests
     [Test]
     public void WebTestsSimplePasses()
     {
+        //do login and see if it works?
         // Use the Assert class to test conditions
     }
 
@@ -18,8 +20,15 @@ public class WebTests
     [UnityTest]
     public IEnumerator WebTestsWithEnumeratorPasses()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        //ChaitaesWeb.Web cWeb = new ChaitaesWeb.Web();
+        GameObject blah = new GameObject();
+        blah.AddComponent<ChaitaesWeb.Web>();
+        ChaitaesWeb.Web cWeb = blah.GetComponent<ChaitaesWeb.Web>();
+        cWeb.UpdateUserName("hero");
+        cWeb.SendClassicScore(5);
+        yield return new WaitForSeconds(2);
+        cWeb.GetScore();
+        yield return new WaitForSeconds(5);
+        Assert.AreEqual(5, cWeb.scores["hero"]);
     }
 }

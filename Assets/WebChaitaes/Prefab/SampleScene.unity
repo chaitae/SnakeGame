@@ -391,6 +391,10 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1271412178}
+    - target: {fileID: 3767097828404240983, guid: e1b44a382093eec4f88febb6c81bcde4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3767097828632843052, guid: e1b44a382093eec4f88febb6c81bcde4, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -515,6 +519,14 @@ PrefabInstance:
     - target: {fileID: 8572008875231048581, guid: 529c8b703e5b58e4383e0c6908a75407, type: 3}
       propertyPath: m_Name
       value: Web
+      objectReference: {fileID: 0}
+    - target: {fileID: 8572008875231048582, guid: 529c8b703e5b58e4383e0c6908a75407, type: 3}
+      propertyPath: secureScoreURL
+      value: http://localhost/HighscoreTemplate/SetScore.php
+      objectReference: {fileID: 0}
+    - target: {fileID: 8572008875231048582, guid: 529c8b703e5b58e4383e0c6908a75407, type: 3}
+      propertyPath: classicScoreURL
+      value: http://localhost/HighscoreTemplate/SnakeSetScore.php
       objectReference: {fileID: 0}
     - target: {fileID: 8572008875231048583, guid: 529c8b703e5b58e4383e0c6908a75407, type: 3}
       propertyPath: m_RootOrder
