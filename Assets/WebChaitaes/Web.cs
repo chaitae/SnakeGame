@@ -16,13 +16,13 @@ namespace ChaitaesWeb
         string username, password,email;
         public UnityEvent onUsernameExistsRegister;
         public UnityEvent onEmailExistsRegister;
-        public static Action<Dictionary<string, int>> onGetScores;
-        public Dictionary<string, int> scores = new Dictionary<string, int>();
+        public static Action<List<Tuple<string, int>>> onGetScores;
+        public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
         [SerializeField]
-        string classicScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
+        string sendScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
         [SerializeField]
         string secureScoreURL = "http://localhost/HighscoreTemplate/SetScore.php";
-        string classicGetScoreURL = "http://localhost/HighscoreTemplate/GetScores.php";
+        string getScoreURL = "http://localhost/HighscoreTemplate/GetScores.php";
 
 
         [Tooltip("No need for logging in")]
@@ -55,25 +55,15 @@ namespace ChaitaesWeb
             string hashedPass = Encryption.GenerateSHA256Hash(password, salt);
             StartCoroutine(RegisterHelper(username, hashedPass,salt, email));
         }
-        public void SendClassicScore(int score)
-        {
-            StartCoroutine(SendScoreHelper(score, classicScoreURL));
-        }
         public void SendScore(int score)
         {
-            if(isClassicScoreboard)
-            {
-                StartCoroutine(SendScoreHelper(score, classicScoreURL));
-            }
-            else
-            {
-                StartCoroutine(SendScoreHelper(score, secureScoreURL));
+            StartCoroutine(SendScoreHelper(score, sendScoreURL));
 
-            }
         }
+        [ContextMenu("GetScore")]
         public void GetScore()
         {
-            StartCoroutine(GetScoresHelper(classicGetScoreURL));
+            StartCoroutine(GetScoresHelper(getScoreURL));
 
         }
         void Login(string username,string password)
@@ -228,18 +218,13 @@ namespace ChaitaesWeb
                                 int score;
                                 if (int.TryParse(parts[1], out score))
                                 {
-                                    // Add the username and score to the dictionary
-                                    scores[username] = score;
+
+                                    scores.Add(new Tuple<string,int>(username,score)) ;
                                 }
                                 //concat it
                             }
                         }
                         onGetScores?.Invoke(scores);
-                        // Print the usernames and scores
-                        foreach (var pair in scores)
-                        {
-                            Debug.Log($"Username: {pair.Key}, Score: {pair.Value}");
-                        }
                         break;
 
                     }
