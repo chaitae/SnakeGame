@@ -16,15 +16,8 @@ namespace ChaitaesWeb
         public UnityEvent onUsernameExistsRegister;
         public UnityEvent onEmailExistsRegister;
         public static Action<Dictionary<string, int>> onGetScores;
-        //public UnityEvent OnGetScores(Dictionary<string, int> scores);
         Dictionary<string, int> scores = new Dictionary<string, int>();
 
-        private void Awake()
-        {
-            username = "hero";
-            StartCoroutine(SetScore());
-            //StartCoroutine(GetScores());
-        }
         public void UpdateUserName(string str)
         {
             username = str;
@@ -46,6 +39,15 @@ namespace ChaitaesWeb
             string salt = Encryption.CreateSalt(5);
             string hashedPass = Encryption.GenerateSHA256Hash(password, salt);
             StartCoroutine(RegisterHelper(username, hashedPass,salt, email));
+        }
+        [ContextMenu("doscore")]
+        public void testSendScore()
+        {
+            SendScore(5);
+        }
+        public void SendScore(int score)
+        {
+            StartCoroutine(SetScoreHelper(score));
         }
         void Login(string username,string password)
         {
@@ -131,11 +133,12 @@ namespace ChaitaesWeb
                 }
             }
         }
-        IEnumerator SetScore()
+        IEnumerator SetScoreHelper(int score)
         {
 
             WWWForm form = new WWWForm();
             form.AddField("loginUser", username); //this needs to be a field reflected in the php file
+            form.AddField("sentScore", score); //this needs to be a field reflected in the php file
             url = "http://localhost/HighscoreTemplate/SetScore.php"; 
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
@@ -155,32 +158,8 @@ namespace ChaitaesWeb
                         break;
                     case UnityWebRequest.Result.Success:
                         Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                        string input = webRequest.downloadHandler.text;
 
-                        string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                        foreach (string line in lines)
-                        {
-                            // Split each line into username and score
-                            string[] parts = line.Split(' ');
-
-                            if (parts.Length == 2)
-                            {
-                                string username = parts[0];
-                                int score;
-                                if (int.TryParse(parts[1], out score))
-                                {
-                                    // Add the username and score to the dictionary
-                                    scores[username] = score;
-                                }
-                                //concat it
-                            }
-                        }
-                        onGetScores?.Invoke(scores);
-                        // Print the usernames and scores
-                        foreach (var pair in scores)
-                        {
-                            Debug.Log($"Username: {pair.Key}, Score: {pair.Value}");
-                        }
+                        Debug.Log("score updated");
                         break;
 
                 }
