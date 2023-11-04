@@ -6,7 +6,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
-    CharacterController characterController;
     [SerializeField]
     float speed = 1.0f;
     [SerializeField]
@@ -52,10 +51,16 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    [ContextMenu("GrowBody")]
     public void GrowBody()
     {
-        bodyList.Add(GameObject.CreatePrimitive(PrimitiveType.Cube));
+        if(snakeSegment != null)
+        {
+            bodyList.Add(Instantiate(snakeSegment));
+        }
+        else
+        {
+            bodyList.Add(GameObject.CreatePrimitive(PrimitiveType.Cube));
+        }
         bodyList[bodyList.Count - 1].name = "cube" + (bodyList.Count - 1);
         //make object behind original
         bodyList[bodyList.Count - 1].transform.position =gameObject.transform.position- gameObject.transform.forward * gameObject.transform.lossyScale.y;
