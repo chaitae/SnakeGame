@@ -18,6 +18,19 @@ public class WebTests
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
+    public IEnumerator InsertSallyHighScoreCheckRegistered()
+    {
+        GameObject blah = new GameObject();
+        ChaitaesWeb.Web cWeb = blah.AddComponent<ChaitaesWeb.Web>();
+        cWeb.UpdateUserName("sally");
+        Assert.AreEqual(cWeb.GetCurrentUserName(), "sally");
+        cWeb.SendScore(200);
+        yield return null;
+        cWeb.GetScore();
+        yield return null;
+    }
+
+    [UnityTest]
     public IEnumerator InsertHighScoreCheckRegistered()
     {
         GameObject blah = new GameObject();

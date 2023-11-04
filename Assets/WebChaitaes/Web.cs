@@ -20,8 +20,6 @@ namespace ChaitaesWeb
         public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
         [SerializeField]
         string sendScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
-        [SerializeField]
-        string secureScoreURL = "http://localhost/HighscoreTemplate/SetScore.php";
         string getScoreURL = "http://localhost/HighscoreTemplate/GetScores.php";
 
 
