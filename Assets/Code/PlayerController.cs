@@ -6,6 +6,9 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+    [SerializeField]
+    Animator animator;
     [SerializeField]
     float speed = 1.0f;
     [SerializeField]
@@ -18,6 +21,17 @@ public class PlayerController : MonoBehaviour
     float stepOffset = 1f;
     public GameObject snakeSegment;
     // Start is called before the first frame update
+    public void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            GameObject.Destroy(gameObject);
+        }
+    }
     void Start()
     {
         bodyList.Add(gameObject);
@@ -53,7 +67,9 @@ public class PlayerController : MonoBehaviour
 
     public void GrowBody()
     {
-        if(snakeSegment != null)
+
+        animator.SetTrigger("bite");
+        if (snakeSegment != null)
         {
             bodyList.Add(Instantiate(snakeSegment));
         }
@@ -65,4 +81,5 @@ public class PlayerController : MonoBehaviour
         //make object behind original
         bodyList[bodyList.Count - 1].transform.position =gameObject.transform.position- gameObject.transform.forward * gameObject.transform.lossyScale.y;
     }
+
 }

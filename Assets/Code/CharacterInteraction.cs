@@ -12,7 +12,7 @@ public class CharacterInteraction : MonoBehaviour
     {
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, hitDistance, layerMask))
+        if (Physics.Raycast(transform.position - Vector3.up*transform.lossyScale.y/2, transform.TransformDirection(Vector3.forward), out hit, hitDistance, layerMask))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.magenta);
             //get the other hit item
