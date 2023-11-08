@@ -19,8 +19,8 @@ public struct score
 }
 public class UI : MonoBehaviour
 {
-    public UIDocument uiDocument;
-    VisualElement root;
+    public UIDocument uiLeaderBoard,uiSubmitScore;
+    VisualElement rootLeaderBoard,rootSubmitScore;
     List<score> scores = new List<score>();
     [SerializeField]
     VisualTreeAsset ListEntryTemplate;
@@ -30,34 +30,38 @@ public class UI : MonoBehaviour
     Label userScore;
     private void OnDisable()
     {
-        LeaderBoardRequests.onGetScores -= SetScores;
-        GameManager.OnDeath -= ShowEndScreen;
+        LeaderBoardRequests.instance.onGetScores -= SetScores;
+        GameManager.OnDeath -= ShowLeaderBoard;
     }
-    void SwitchSubmitScore()
+    void ShowSubmitScore()
     {
-        uiDocument.visualTreeAsset = submitScore;
-        VisualElement rootB = uiDocument.rootVisualElement;
-        Button submitScoreB = rootB.Q<Button>("SubmitScore");
-        TextField userField = rootB.Q<TextField>("textField"); 
-        //TextInput userField = root.Q<TextInput>("userTextField");
-        Debug.Log(userField.text);
-        Debug.Log(GameManager.instance.score);
-        //ChaitaesWeb.LeaderBoardRequests.instance.UpdateUsername(userField.text);
-        //ChaitesWeb.LeaderBoardRequests.userField.text;
-        submitScoreB.clicked += () => {
+        uiLeaderBoard.enabled = false;
+        uiSubmitScore.enabled = true;
+        rootSubmitScore = uiSubmitScore.rootVisualElement;
+        Button submitScoreB = rootSubmitScore.Q<Button>("SubmitScore");
+        TextField userField = rootSubmitScore.Q<TextField>("textField");
+        submitScoreB.clicked += () =>
+        {
             ChaitaesWeb.LeaderBoardRequests.instance.UpdateUsername(userField.text);
             ChaitaesWeb.LeaderBoardRequests.instance.SendScore(GameManager.instance.score);
-            ShowEndScreen();
+            ShowLeaderBoard();
         };
     }
-    void ShowEndScreen()
+    void ShowLeaderBoard()
     {
-        uiDocument.enabled = true;
-        root = uiDocument.rootVisualElement;
-        userScore = root.Q<Label>("userScoreLabel");
+        uiLeaderBoard.enabled = true;
+        uiSubmitScore.enabled = false;
+        uiLeaderBoard.visualTreeAsset = endScreen;
+
+        rootLeaderBoard = uiLeaderBoard.rootVisualElement;
+        userScore = rootLeaderBoard.Q<Label>("userScoreLabel");
         userScore.text ="Your Score: \n" + GameManager.instance.score + "";
-        //uiDocument.visualTreeAsset = endScreen;
-        //FillLeaderboard();
+        Button submit = rootLeaderBoard.Q<Button>("submit");
+        Button retry = rootLeaderBoard.Q<Button>("retry");
+
+        submit.clicked += ShowSubmitScore;
+        retry.clicked += GameManager.instance.RestartGame;
+        FillLeaderboard();
     }
     List<score> ConvertTupleIntoScore(List<Tuple<string,int>> _scores)
     {
@@ -68,7 +72,7 @@ public class UI : MonoBehaviour
     void FillLeaderboard()
     {
         userScore.text = "Your Score:\n" + GameManager.instance.score + "";
-        ScoreList = root.Q<ListView>("ScoreList");
+        ScoreList = rootLeaderBoard.Q<ListView>("ScoreList");
         // Set up a make item function for a list entry
         ScoreList.makeItem = () =>
         {
@@ -84,38 +88,18 @@ public class UI : MonoBehaviour
         {
             (item.userData as ScoreEntryController).SetScoreInfo(scores[index].username, scores[index].points);
         };
-        LeaderBoardRequests.onGetScores += SetScores;
         LeaderBoardRequests.instance.GetScore();
     }
     void SetScores(List<Tuple<string, int>> _scores)
     {
         scores = ConvertTupleIntoScore(_scores);
-
         ScoreList.itemsSource = scores;
-    }
-    void SetEndScreenBehaviors()
-    {
-        
-        //endScreenRoot = uiDocument.rootVisualElement;
-        //Button submit = endScreenRoot.Q<Button>("submit");
-        //Button retry = endScreenRoot.Q<Button>("retry");
-        //userScore = endScreenRoot.Q<Label>("userScoreLabel");
-        ////retry.RegisterCallback<>(Debug.Log("noo"));
-        ////submit.onClick += GameM
-        //submit.clicked += SwitchSubmitScore;
-        //retry.clicked += GameManager.instance.RestartGame;
-        //ChaitaesWeb.LeaderBoardRequests.instance.UpdateUsername(submit);
     }
     // Start is called before the first frame update
     void Start()
     {
-        uiDocument = GetComponent<UIDocument>();
-        //SetEndScreenBehaviors();
-        //FillLeaderboard();
-        //endScreenRoot = uiDocument.rootVisualElement;
-
-        //SetButtons
-        GameManager.OnDeath += ShowEndScreen;
+        LeaderBoardRequests.instance.onGetScores += SetScores;
+        GameManager.OnDeath += ShowLeaderBoard;
     }
 
 }

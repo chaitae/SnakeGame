@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    int deathcount = 0;
     public static Action OnGameStart;
     public static Action OnDeath;
     public static Action<int> OnScoreChanged;
@@ -40,6 +41,11 @@ public class GameManager : MonoBehaviour
     }
     public void Death()
     {
-        OnDeath?.Invoke();
+        if(deathcount == 0)
+        {
+            OnDeath?.Invoke();
+        }
+        deathcount++;
+
     }
 }

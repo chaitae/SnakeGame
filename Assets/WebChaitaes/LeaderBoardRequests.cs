@@ -16,7 +16,7 @@ namespace ChaitaesWeb
         string username;
         public UnityEvent onUsernameExistsRegister;
         public UnityEvent onEmailExistsRegister;
-        public static Action<List<Tuple<string, int>>> onGetScores;
+        public Action<List<Tuple<string, int>>> onGetScores;
         public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
         [SerializeField]
         string sendScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
@@ -83,8 +83,6 @@ namespace ChaitaesWeb
                         break;
                     case UnityWebRequest.Result.Success:
                         Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-
-                        Debug.Log("score updated");
                         break;
 
                 }

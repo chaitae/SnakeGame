@@ -6,6 +6,7 @@ public class Wall : MonoBehaviour, PlayerCollidable
 {
     public void OnCollide(PlayerController playerController)
     {
+        playerController.GetComponent<Collider>().enabled = false;
         GameManager.instance.Death();
     }
 }

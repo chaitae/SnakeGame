@@ -7,6 +7,7 @@ public class SnakeBody : MonoBehaviour,PlayerCollidable
 {
     public void OnCollide(PlayerController playerController)
     {
+        playerController.GetComponent<Collider>().enabled = false;  
         GameManager.instance.Death();
     }
     public void SetColorandShape(Mesh mesh, Color color)
