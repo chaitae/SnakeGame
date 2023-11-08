@@ -16,7 +16,7 @@ public class CharacterInteraction : MonoBehaviour
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.magenta);
             //get the other hit item
-            PlayerCollidable tempCollidable = hit.collider.GetComponent<PlayerCollidable>();
+            PlayerCollidable tempCollidable = hit.collider.GetComponentInChildren<PlayerCollidable>();
             if (tempCollidable != null)
             {
                 tempCollidable.OnCollide(GetComponent<PlayerController>());

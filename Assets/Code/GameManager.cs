@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour
 {
+    public static Action OnGameStart;
     public static Action OnDeath;
     public static Action<int> OnScoreChanged;
-    static int score = 0;
+    public int score = 0;
     public static GameManager instance;
     // Start is called before the first frame update
     private void Awake()
@@ -20,6 +23,15 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    private void Start()
+    {
+        OnGameStart?.Invoke();
+    }
+    public void RestartGame()
+    {
+        Debug.Log("restart game");
+        SceneManager.LoadScene(0);
     }
     public void AddScore(int points)
     {

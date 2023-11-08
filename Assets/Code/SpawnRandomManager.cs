@@ -23,10 +23,14 @@ public class SpawnRandomManager : MonoBehaviour
         {
             GameObject.Destroy(this.gameObject);
         }
+        GameManager.OnGameStart += SpawnRandomFood;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnGameStart -= SpawnRandomFood;
     }
     Vector3 GetRandomPosition()
     {
-
         float randomAngle = Random.Range(0, 2 * Mathf.PI);
         float randomDistance = Random.Range(0, maxDistanceFromTarget);
         float randomZ = randomDistance * Mathf.Sin(randomAngle);
@@ -35,8 +39,7 @@ public class SpawnRandomManager : MonoBehaviour
             Vector3.right * randomX + Vector3.forward * randomZ;
         return randomPos;
     }
-    [ContextMenu("SpawnrandoGO")]
-    public void SpawnRandomGO()
+    public void SpawnRandomFood()
     {
         Vector3 randomPos = GetRandomPosition();
         while(Vector3.Distance(randomPos,PlayerController.instance.transform.position) <= 4f)

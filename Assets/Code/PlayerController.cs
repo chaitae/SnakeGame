@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void GrowBody()
+    public void GrowBody(Mesh mesh, Color color)
     {
 
         animator.SetTrigger("bite");
@@ -78,6 +78,8 @@ public class PlayerController : MonoBehaviour
             bodyList.Add(GameObject.CreatePrimitive(PrimitiveType.Cube));
         }
         bodyList[bodyList.Count - 1].name = "cube" + (bodyList.Count - 1);
+
+        bodyList[bodyList.Count - 1].GetComponent<SnakeBody>().SetColorandShape(mesh, color);
         //make object behind original
         bodyList[bodyList.Count - 1].transform.position =gameObject.transform.position- gameObject.transform.forward * gameObject.transform.lossyScale.y;
     }

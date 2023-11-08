@@ -14,7 +14,7 @@ public class ScoreboardController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Web.onGetScores += UpdateScoreboard;
+        LeaderBoardRequests.onGetScores += UpdateScoreboard;
     }
     public void UpdateScoreboard(List<Tuple<string, int>> scores)
     {

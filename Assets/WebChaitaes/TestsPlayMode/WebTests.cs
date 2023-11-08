@@ -21,8 +21,8 @@ public class WebTests
     public IEnumerator InsertSallyHighScoreCheckRegistered()
     {
         GameObject blah = new GameObject();
-        ChaitaesWeb.Web cWeb = blah.AddComponent<ChaitaesWeb.Web>();
-        cWeb.UpdateUserName("sally");
+        ChaitaesWeb.LeaderBoardRequests cWeb = blah.AddComponent<ChaitaesWeb.LeaderBoardRequests>();
+        cWeb.UpdateUsername("sally");
         Assert.AreEqual(cWeb.GetCurrentUserName(), "sally");
         cWeb.SendScore(200);
         yield return null;
@@ -34,8 +34,8 @@ public class WebTests
     public IEnumerator InsertHighScoreCheckRegistered()
     {
         GameObject blah = new GameObject();
-        ChaitaesWeb.Web cWeb = blah.AddComponent<ChaitaesWeb.Web>();
-        cWeb.UpdateUserName("hero");
+        ChaitaesWeb.LeaderBoardRequests cWeb = blah.AddComponent<ChaitaesWeb.LeaderBoardRequests>();
+        cWeb.UpdateUsername("hero");
         Assert.AreEqual(cWeb.GetCurrentUserName(), "hero");
         cWeb.SendScore(5);
         yield return null;

@@ -5,37 +5,16 @@ using UnityEngine;
 
 public class SnakeBody : MonoBehaviour,PlayerCollidable
 {
-    static Mesh prevMesh;
-    static Color prevColor;
-    public Color[] colorPallet;
-    public Mesh[] meshes;
     public void OnCollide(PlayerController playerController)
     {
         GameManager.instance.Death();
     }
-    public void RandomizeShapeAndColorRotation()
+    public void SetColorandShape(Mesh mesh, Color color)
     {
-        int randomColorIndex = Random.Range(0, colorPallet.Length);
-        int randomMeshIndex = Random.Range(0,meshes.Length);
-        int colorRolledSame = 0;
 
-        while(colorPallet[randomColorIndex] == prevColor && colorRolledSame < 4)
-        {
-            randomColorIndex = Random.Range(0, colorPallet.Length);
-            colorRolledSame++;
-        }
-        //getmesh
-        GetComponentInChildren<MeshFilter>().mesh = meshes[randomMeshIndex];
-        GetComponentInChildren<Renderer>().material.color = colorPallet[randomColorIndex];
+        GetComponentInChildren<MeshFilter>().mesh = mesh;
+        GetComponentInChildren<Renderer>().material.color = color;
         transform.GetChild(0).GetComponent<Transform>().localRotation = Random.rotation;
-
-        prevColor = colorPallet[randomColorIndex];
-        prevMesh = meshes[randomMeshIndex];
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        RandomizeShapeAndColorRotation();
     }
 
 }

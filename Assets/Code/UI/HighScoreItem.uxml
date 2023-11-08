@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Code/UI/HighScoreItem.uss?fileID=7433441132597879392&amp;guid=ae06964a3e7d12340aaf7403e1efc0fc&amp;type=3#HighScoreItem" />
+    <ui:VisualElement style="align-items: flex-start; justify-content: flex-start; flex-direction: row; color: rgb(255, 255, 255); font-size: 46px; -unity-font-style: bold; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 59px;">
+        <ui:Label text="PlayerName" display-tooltip-when-elided="true" name="player-name" style="font-size: 35px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 33px; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-font-style: bold; width: 50%;" />
+        <ui:Label text="14005" display-tooltip-when-elided="true" name="points" style="font-size: 35px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 33px; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-font-style: bold;" />
+    </ui:VisualElement>
+</ui:UXML>
