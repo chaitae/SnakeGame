@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="width: 100%; height: 100%;">
+        <ui:Label text="Snek Snack" display-tooltip-when-elided="true" style="height: 293px; font-size: 147px; color: rgba(255, 255, 255, 0.62); -unity-text-align: middle-center; -unity-font-style: bold; letter-spacing: -2px; top: 59px; -unity-text-outline-width: 0; -unity-text-outline-color: rgb(255, 255, 255);" />
+        <ui:Label text="Press any key" display-tooltip-when-elided="true" style="font-size: 50px; color: rgba(255, 255, 255, 0.71); -unity-text-align: upper-center;" />
+    </ui:VisualElement>
+</ui:UXML>

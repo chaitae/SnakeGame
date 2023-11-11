@@ -18,9 +18,8 @@ namespace ChaitaesWeb
         public UnityEvent onEmailExistsRegister;
         public Action<List<Tuple<string, int>>> onGetScores;
         public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
-        [SerializeField]
-        string sendScoreURL = "http://localhost/HighscoreTemplate/SnakeSetScore.php";
-        string getScoreURL = "http://localhost/HighscoreTemplate/GetScores.php";
+        string sendScoreURL = "http://3.89.209.183/SnakeSetScore.php";
+        string getScoreURL = "http://3.89.209.183/GetScores.php";
         public static LeaderBoardRequests instance;
 
         private void Awake()
@@ -64,13 +63,14 @@ namespace ChaitaesWeb
             WWWForm form = new WWWForm();
             form.AddField("loginUser", username); //this needs to be a field reflected in the php file
             form.AddField("sentScore", score); //this needs to be a field reflected in the php file
-            url = urlTemp;
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+            url = "http://3.89.209.183/SnakeSetScore.php";
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://3.89.209.183/SnakeSetScore.php", form))
             {
                 // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
                 string[] pages = url.Split('/');
                 int page = pages.Length - 1;
+                Debug.Log(pages[3]);
 
                 switch (webRequest.result)
                 {
@@ -127,7 +127,7 @@ namespace ChaitaesWeb
                                 if (int.TryParse(parts[1], out score))
                                 {
 
-                                    scores.Add(new Tuple<string,int>(username,score)) ;
+                                    scores.Add(new Tuple<string, int>(username, score));
                                 }
                                 //concat it
                             }
@@ -135,8 +135,8 @@ namespace ChaitaesWeb
                         onGetScores?.Invoke(scores);
                         break;
 
-                    }
                 }
+            }
 
         }
         

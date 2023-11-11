@@ -29,7 +29,6 @@ public class Food : MonoBehaviour,PlayerCollidable
         //getmesh
         GetComponentInChildren<MeshFilter>().mesh = meshes[randomMeshIndex];
         GetComponentInChildren<Renderer>().material.color = colorPallet[randomColorIndex];
-        //transform.GetChild(0).GetComponent<Transform>().localRotation = Random.rotation;
         mesh = meshes[randomMeshIndex];
         color = colorPallet[randomColorIndex];
 

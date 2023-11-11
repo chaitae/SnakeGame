@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Debug.Log("restart game");
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
     public void AddScore(int points)
     {
@@ -46,6 +46,6 @@ public class GameManager : MonoBehaviour
             OnDeath?.Invoke();
         }
         deathcount++;
-
     }
+
 }
