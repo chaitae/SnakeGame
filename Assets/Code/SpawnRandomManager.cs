@@ -12,6 +12,7 @@ public class SpawnRandomManager : MonoBehaviour
     [SerializeField]
     GameObject spawnGameObject;
     public static SpawnRandomManager instance;
+    GameObject foodGO;
 
     private void Awake()
     {
@@ -46,8 +47,12 @@ public class SpawnRandomManager : MonoBehaviour
         {
             randomPos = GetRandomPosition();
         }
-        GameObject spawnGO = Instantiate(spawnGameObject);
-        spawnGO.transform.position = new Vector3(randomPos.x, spawnGO.transform.lossyScale.y, randomPos.z);
+        if(foodGO == null)
+        {
+            foodGO = Instantiate(spawnGameObject);
+        }
+        foodGO.transform.position = new Vector3(randomPos.x, foodGO.transform.lossyScale.y, randomPos.z);
+        foodGO.SetActive(true);
     }
 
 

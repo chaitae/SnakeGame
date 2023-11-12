@@ -63,8 +63,8 @@ namespace ChaitaesWeb
             WWWForm form = new WWWForm();
             form.AddField("loginUser", username); //this needs to be a field reflected in the php file
             form.AddField("sentScore", score); //this needs to be a field reflected in the php file
-            url = "http://3.89.209.183/SnakeSetScore.php";
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://3.89.209.183/SnakeSetScore.php", form))
+            url = sendScoreURL;
+            using (UnityWebRequest webRequest = UnityWebRequest.Post(sendScoreURL, form))
             {
                 // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
