@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     float segmentOffset = 2f;
     float stepOffset = 1f;
     public GameObject snakeSegment;
+    bool isAlive = true;
     // Start is called before the first frame update
     public void Awake()
     {
@@ -31,22 +33,28 @@ public class PlayerController : MonoBehaviour
         {
             GameObject.Destroy(gameObject);
         }
+        GameManager.OnDeath += OnDeath;
+    }
+    void OnDeath()
+    {
+        isAlive = false;
     }
     void Start()
     {
         bodyList.Add(gameObject);
         moveHistory.Add(new Tuple<Vector3, Quaternion>(this.transform.position, this.transform.rotation));
     }
-    private void FixedUpdate()
-    {
-        stepOffset = segmentOffset/(speed * Time.deltaTime);
 
-        if(Input.GetAxis("Horizontal") > 0) 
+    private void Move()
+    {
+        stepOffset = segmentOffset / (speed * Time.deltaTime);
+
+        if (Input.GetAxis("Horizontal") > 0)
         {
             //rotate the person
-            gameObject.transform.Rotate(transform.up*Time.deltaTime*turnSpeed);
+            gameObject.transform.Rotate(transform.up * Time.deltaTime * turnSpeed);
         }
-        else if(Input.GetAxis("Horizontal") < 0)
+        else if (Input.GetAxis("Horizontal") < 0)
         {
             gameObject.transform.Rotate(-transform.up * Time.deltaTime * turnSpeed);
         }
@@ -62,7 +70,13 @@ public class PlayerController : MonoBehaviour
         }
         gameObject.transform.position = transform.position + transform.forward * Time.deltaTime * speed;
         moveHistory.Add(new Tuple<Vector3, Quaternion>(this.transform.position, this.transform.rotation));
-
+    }
+    private void FixedUpdate()
+    {
+        if (isAlive)
+        {
+            Move();
+        }
     }
 
     public void GrowBody(Mesh mesh, Color color)

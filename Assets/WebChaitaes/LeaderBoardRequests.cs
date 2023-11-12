@@ -105,6 +105,7 @@ namespace ChaitaesWeb
                     case UnityWebRequest.Result.ConnectionError:
                     case UnityWebRequest.Result.DataProcessingError:
                         Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                        //Do local high score
                         break;
                     case UnityWebRequest.Result.ProtocolError:
                         Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);

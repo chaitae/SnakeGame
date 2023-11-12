@@ -10,9 +10,12 @@ public class GameManager : MonoBehaviour
     int deathcount = 0;
     public static Action OnGameStart;
     public static Action OnDeath;
+    public static Action<bool> OnPause;
     public static Action<int> OnScoreChanged;
+    
     public int score = 0;
     public static GameManager instance;
+    bool isPaused = false;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -24,6 +27,28 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    private void Update()
+    {
+        if(Input.GetButtonUp("Start"))
+        {
+            TogglePause();
+        }
+    }
+    private void TogglePause()
+    {
+        if(!isPaused)
+        {
+            Time.timeScale = 0;
+            OnPause?.Invoke(isPaused);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            OnPause?.Invoke(isPaused);
+
+        }
+        isPaused = !isPaused; 
     }
     private void Start()
     {

@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class SnakeBody : MonoBehaviour,PlayerCollidable
 {
+    //void Awake()
+    //{
+    //    GameManager.OnDeath += OnDeath;
+    //}
+    //void OnDeath() 
+    //{ 
+    //}
     public void OnCollide(PlayerController playerController)
     {
         playerController.GetComponent<Collider>().enabled = false;  

@@ -19,7 +19,7 @@ public struct score
 }
 public class UI : MonoBehaviour
 {
-    public UIDocument uiLeaderBoard,uiSubmitScore;
+    public UIDocument uiLeaderBoard,uiSubmitScore,uiPauseScreen;
     VisualElement rootLeaderBoard,rootSubmitScore;
     List<score> scores = new List<score>();
     [SerializeField]
@@ -28,11 +28,26 @@ public class UI : MonoBehaviour
     VisualTreeAsset submitScore,endScreen;
     ListView ScoreList;
     Label userScore;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        LeaderBoardRequests.instance.onGetScores += SetScores;
+        GameManager.OnDeath += ShowLeaderBoard;
+        GameManager.OnPause += Pause;
+    }
     private void OnDisable()
     {
         LeaderBoardRequests.instance.onGetScores -= SetScores;
         GameManager.OnDeath -= ShowLeaderBoard;
+        GameManager.OnPause -= Pause;
     }
+
+    private void Pause(bool isPaused)
+    {
+        uiPauseScreen.enabled = !isPaused;
+    }
+
     void ShowSubmitScore()
     {
         uiLeaderBoard.enabled = false;
@@ -94,12 +109,6 @@ public class UI : MonoBehaviour
     {
         scores = ConvertTupleIntoScore(_scores);
         ScoreList.itemsSource = scores;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        LeaderBoardRequests.instance.onGetScores += SetScores;
-        GameManager.OnDeath += ShowLeaderBoard;
     }
 
 }
