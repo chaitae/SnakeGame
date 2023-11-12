@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour
         }
         GameManager.OnDeath += OnDeath;
     }
+    private void OnDisable()
+    {
+        GameManager.OnDeath -= OnDeath;
+    }
     void OnDeath()
     {
         isAlive = false;

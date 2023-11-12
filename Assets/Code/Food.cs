@@ -11,12 +11,12 @@ public class Food : MonoBehaviour,PlayerCollidable
     public Mesh[] meshes;
     Mesh mesh;
     Color color;
-    BoxCollider collider;
+    BoxCollider boxCollider;
     AudioSource audioSource;
     void Awake()
     {
         RandomizeShapeAndColorRotation();
-        collider = GetComponent<BoxCollider>();
+        boxCollider = GetComponent<BoxCollider>();
         audioSource = GetComponent<AudioSource>();
     }
     public void RandomizeShapeAndColorRotation()
@@ -42,7 +42,7 @@ public class Food : MonoBehaviour,PlayerCollidable
     public void OnCollide(PlayerController playerController)
     {
         audioSource.Play();
-        collider.enabled = false;
+        boxCollider.enabled = false;
         playerController.GrowBody(mesh,color);
         GameManager.instance.AddScore(1);
         //GameObject.Destroy(gameObject, .3f);
@@ -53,7 +53,7 @@ public class Food : MonoBehaviour,PlayerCollidable
         yield return new WaitForSeconds(.3f);
         RandomizeShapeAndColorRotation();
         SpawnRandomManager.instance.SpawnRandomFood();
-        collider.enabled = true;
+        boxCollider.enabled = true;
 
     }
 }

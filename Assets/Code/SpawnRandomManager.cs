@@ -24,12 +24,24 @@ public class SpawnRandomManager : MonoBehaviour
         {
             GameObject.Destroy(this.gameObject);
         }
+    }
+    private void Start()
+    {
+        GameManager.OnGameStart += OnGameStart;
         GameManager.OnGameStart += SpawnRandomFood;
     }
+
     private void OnDisable()
     {
         GameManager.OnGameStart -= SpawnRandomFood;
+        GameManager.OnGameStart -= OnGameStart;
     }
+
+    private void OnGameStart()
+    {
+        foodGO = Instantiate(spawnGameObject);
+    }
+
     Vector3 GetRandomPosition()
     {
         float randomAngle = Random.Range(0, 2 * Mathf.PI);
@@ -46,10 +58,6 @@ public class SpawnRandomManager : MonoBehaviour
         while(Vector3.Distance(randomPos,PlayerController.instance.transform.position) <= 4f)
         {
             randomPos = GetRandomPosition();
-        }
-        if(foodGO == null)
-        {
-            foodGO = Instantiate(spawnGameObject);
         }
         foodGO.transform.position = new Vector3(randomPos.x, foodGO.transform.lossyScale.y, randomPos.z);
         foodGO.SetActive(true);

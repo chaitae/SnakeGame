@@ -14,13 +14,13 @@ namespace ChaitaesWeb
     {
         string url;
         string username;
-        public UnityEvent onUsernameExistsRegister;
-        public UnityEvent onEmailExistsRegister;
         public Action<List<Tuple<string, int>>> onGetScores;
         public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
-        string sendScoreURL = "http://3.89.209.183/SnakeSetScore.php";
-        string getScoreURL = "http://3.89.209.183/GetScores.php";
+        //below needs to be updated when starting and stopping the server due to not buying an elastic ip address
+        string sendScoreURL = "http://174.129.69.1/SnakeSetScore.php";
+        string getScoreURL = "http://174.129.69.1/GetScores.php";
         public static LeaderBoardRequests instance;
+        public bool isLocal = true;
 
         private void Awake()
         {
@@ -49,12 +49,26 @@ namespace ChaitaesWeb
 
         public void SendScore(int score)
         {
-            StartCoroutine(SendScoreHelper(score, sendScoreURL));
+            if (!isLocal)
+            {
+                StartCoroutine(SendScoreHelper(score, sendScoreURL));
 
+            }
+            else
+            {
+                scores.Add(Tuple.Create(username,score));
+            }
         }
         public List<Tuple<string, int>> GetScore()
         {
-            StartCoroutine(GetScoresHelper(getScoreURL));
+            if(!isLocal)
+            {
+                StartCoroutine(GetScoresHelper(getScoreURL));
+            }
+            else
+            {
+                onGetScores?.Invoke(scores);
+            }
             return scores;
 
         }

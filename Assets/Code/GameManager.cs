@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     int deathcount = 0;
     public static Action OnGameStart;
     public static Action OnDeath;
+    public static Action OnRestart;
     public static Action<bool> OnPause;
     public static Action<int> OnScoreChanged;
     
@@ -56,8 +57,21 @@ public class GameManager : MonoBehaviour
     }
     public void RestartGame()
     {
+        OnRestart?.Invoke();
         Debug.Log("restart game");
-        SceneManager.LoadScene(1);
+        StartCoroutine(LoadLevel());
+    }
+    private IEnumerator LoadLevel()
+    {
+        var asyncLoadLevel = SceneManager.LoadSceneAsync(1);
+        while (!asyncLoadLevel.isDone)
+        {
+            Debug.Log("Loading the Scene");
+            yield return null;
+        }
+        deathcount = 0;
+        OnGameStart?.Invoke();
+        //LoadScene?.Invoke(newSceneName);
     }
     public void AddScore(int points)
     {

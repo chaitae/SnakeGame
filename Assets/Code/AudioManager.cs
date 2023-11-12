@@ -5,6 +5,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
+    List<AudioSource> soundEffects = new List<AudioSource>(); 
     // Start is called before the first frame update
     public AudioSource audioSource;
     void Awake()
@@ -17,8 +18,11 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        audioSource= GetComponent<AudioSource>();
+    }
+    void Start()
+    {
         GameManager.OnDeath += PlayFailGameSound;
+
     }
     private void OnDisable()
     {
@@ -26,6 +30,7 @@ public class AudioManager : MonoBehaviour
     }
     void PlayFailGameSound()
     {
+        audioSource = GetComponent<AudioSource>();
         audioSource.Play();
 
     }

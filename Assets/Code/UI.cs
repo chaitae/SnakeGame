@@ -19,7 +19,8 @@ public struct score
 }
 public class UI : MonoBehaviour
 {
-    public UIDocument uiLeaderBoard,uiSubmitScore,uiPauseScreen;
+    public static UI instance;
+    public UIDocument uiLeaderBoard, uiSubmitScore, uiPauseScreen;
     VisualElement rootLeaderBoard,rootSubmitScore;
     List<score> scores = new List<score>();
     [SerializeField]
@@ -28,18 +29,33 @@ public class UI : MonoBehaviour
     VisualTreeAsset submitScore,endScreen;
     ListView ScoreList;
     Label userScore;
-
+    Action showLeaderBoardHideSubmit;
+    Action showLeaderBoardShowSubmit;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+           Destroy(gameObject);
+        }
+        showLeaderBoardShowSubmit = () => ShowLeaderBoard(true);
+        
+    }
     void Start()
     {
         LeaderBoardRequests.instance.onGetScores += SetScores;
-        GameManager.OnDeath += ShowLeaderBoard;
+        GameManager.OnDeath += showLeaderBoardShowSubmit;
         GameManager.OnPause += Pause;
+        DontDestroyOnLoad(gameObject);
     }
     private void OnDisable()
     {
         LeaderBoardRequests.instance.onGetScores -= SetScores;
-        GameManager.OnDeath -= ShowLeaderBoard;
+        GameManager.OnDeath -= showLeaderBoardShowSubmit;
         GameManager.OnPause -= Pause;
     }
 
@@ -59,10 +75,10 @@ public class UI : MonoBehaviour
         {
             ChaitaesWeb.LeaderBoardRequests.instance.UpdateUsername(userField.text);
             ChaitaesWeb.LeaderBoardRequests.instance.SendScore(GameManager.instance.score);
-            ShowLeaderBoard();
+            ShowLeaderBoard(false);
         };
     }
-    void ShowLeaderBoard()
+    void ShowLeaderBoard(bool showSubmit = true)
     {
         uiLeaderBoard.enabled = true;
         uiSubmitScore.enabled = false;
@@ -72,10 +88,15 @@ public class UI : MonoBehaviour
         userScore = rootLeaderBoard.Q<Label>("userScoreLabel");
         userScore.text ="Your Score: \n" + GameManager.instance.score + "";
         Button submit = rootLeaderBoard.Q<Button>("submit");
-        Button retry = rootLeaderBoard.Q<Button>("retry");
+        if (showSubmit)
+        {
+            submit.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            submit.style.display = DisplayStyle.None;
 
-        submit.clicked += ShowSubmitScore;
-        retry.clicked += GameManager.instance.RestartGame;
+        }
         FillLeaderboard();
     }
     List<score> ConvertTupleIntoScore(List<Tuple<string,int>> _scores)
@@ -88,6 +109,15 @@ public class UI : MonoBehaviour
     {
         userScore.text = "Your Score:\n" + GameManager.instance.score + "";
         ScoreList = rootLeaderBoard.Q<ListView>("ScoreList");
+        rootLeaderBoard = uiLeaderBoard.rootVisualElement;
+        Button retry = rootLeaderBoard.Q<Button>("retry");
+        Button submit = rootLeaderBoard.Q<Button>("submit");
+        submit.clicked += ShowSubmitScore;
+        retry.clicked += () =>
+        {
+            GameManager.instance.RestartGame();
+            uiLeaderBoard.enabled = false;
+        };
         // Set up a make item function for a list entry
         ScoreList.makeItem = () =>
         {
