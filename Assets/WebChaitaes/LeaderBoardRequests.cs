@@ -17,8 +17,8 @@ namespace ChaitaesWeb
         public Action<List<Tuple<string, int>>> onGetScores;
         public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
         //below needs to be updated when starting and stopping the server due to not buying an elastic ip address
-        string sendScoreURL = "http://174.129.69.1/SnakeSetScore.php";
-        string getScoreURL = "http://174.129.69.1/GetScores.php";
+        string sendScoreURL = "http://174.129.69.1/chaiLeadearboard/api/scores.php";
+        string getScoreURL = "http://174.129.69.1/chaiLeadearboard/api/scores/add.php";
         public static LeaderBoardRequests instance;
         public bool isLocal = true;
 
@@ -104,10 +104,9 @@ namespace ChaitaesWeb
         }
         IEnumerator GetScoresHelper(string urlTemp)
         {
-            WWWForm form = new WWWForm();
 
             url = urlTemp;
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
                 // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
