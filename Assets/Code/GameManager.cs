@@ -8,6 +8,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     int deathcount = 0;
+    public int DeathCount
+    {
+        get { return deathcount; }
+        private set { deathcount = value; }
+    }
     public static Action OnGameStart;
     public static Action OnDeath;
     public static Action OnRestart;
@@ -72,7 +77,6 @@ public class GameManager : MonoBehaviour
         }
         deathcount = 0;
         OnGameStart?.Invoke();
-        //LoadScene?.Invoke(newSceneName);
     }
     public void AddScore(int points)
     {

@@ -20,7 +20,10 @@ public class PlayerController : MonoBehaviour
     float segmentOffset = 2f;
     float stepOffset = 1f;
     public GameObject snakeSegment;
-    bool isAlive = true;
+    bool isAlive;
+    public bool IsAlive { get { return isAlive; }
+        private set { isAlive = value; }
+    }
     // Start is called before the first frame update
     public void Awake()
     {

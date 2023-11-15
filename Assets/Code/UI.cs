@@ -89,12 +89,6 @@ public class UI : MonoBehaviour
         }
         FillLeaderboard();
     }
-    List<ScoreInfo> ConvertTupleIntoScore(List<Tuple<string,int>> _scores)
-    {
-        List<ScoreInfo> tempScores = new List<ScoreInfo>();
-        _scores.ForEach(n => tempScores.Add(new ScoreInfo(n.Item1,n.Item2)));
-        return tempScores;
-    }
     void FillLeaderboard()
     {
         userScore.text = "Your Score:\n" + GameManager.instance.score + "";
@@ -127,7 +121,6 @@ public class UI : MonoBehaviour
     }
     void SetScores(List<ScoreInfo> scores)
     {
-        //scores = ConvertTupleIntoScore(_scores);
         this.scores = scores;
         ScoreList.itemsSource = scores;
     }
