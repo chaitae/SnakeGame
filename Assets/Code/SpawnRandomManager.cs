@@ -45,11 +45,6 @@ public class SpawnRandomManager : MonoBehaviour
     }
     public void SpawnRandomFood()
     {
-
-        if (foodGO == null)
-        {
-            //foodGO = Instantiate(spawnGameObject);
-        }
         Vector3 randomPos = GetRandomPosition();
         while(Vector3.Distance(randomPos,PlayerController.instance.transform.position) <= 4f)
         {

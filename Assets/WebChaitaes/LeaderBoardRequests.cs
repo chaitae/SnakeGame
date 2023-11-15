@@ -108,11 +108,6 @@ namespace ChaitaesWeb
                 }
             }
         }
-        List<ScoreInfo> ConvertToScoreInfoList(string str)
-        {
-            ScoreInfo[] converted = JsonHelper.FromRawJson<ScoreInfo>(str);
-            return converted.ToList();
-        }
         IEnumerator GetScoresHelper(string urlTemp)
         {
 

@@ -9,15 +9,20 @@ public class Food : MonoBehaviour,PlayerCollidable
     static Color prevColor;
     public Color[] colorPallet;
     public Mesh[] meshes;
-    Mesh mesh;
-    Color color;
+    Mesh generatedMesh;
+    Color generatedColor;
     BoxCollider boxCollider;
     AudioSource audioSource;
+    MeshFilter meshFilter;
+    Renderer currRenderer;
     void Awake()
     {
-        RandomizeShapeAndColorRotation();
         boxCollider = GetComponent<BoxCollider>();
         audioSource = GetComponent<AudioSource>();
+        meshFilter = GetComponentInChildren<MeshFilter>();
+        currRenderer = GetComponent<Renderer>();
+        RandomizeShapeAndColorRotation();
+
     }
     public void RandomizeShapeAndColorRotation()
     {
@@ -30,11 +35,10 @@ public class Food : MonoBehaviour,PlayerCollidable
             randomColorIndex = Random.Range(0, colorPallet.Length);
             colorRolledSame++;
         }
-        //getmesh
-        GetComponentInChildren<MeshFilter>().mesh = meshes[randomMeshIndex];
-        GetComponentInChildren<Renderer>().material.color = colorPallet[randomColorIndex];
-        mesh = meshes[randomMeshIndex];
-        color = colorPallet[randomColorIndex];
+        meshFilter.mesh = meshes[randomMeshIndex];
+        currRenderer.material.color = colorPallet[randomColorIndex];
+        generatedMesh = meshes[randomMeshIndex];
+        generatedColor = colorPallet[randomColorIndex];
 
         prevColor = colorPallet[randomColorIndex];
         prevMesh = meshes[randomMeshIndex];
@@ -43,9 +47,8 @@ public class Food : MonoBehaviour,PlayerCollidable
     {
         audioSource.Play();
         boxCollider.enabled = false;
-        playerController.GrowBody(mesh,color);
+        playerController.GrowBody(generatedMesh,generatedColor);
         GameManager.instance.AddScore(1);
-        //GameObject.Destroy(gameObject, .3f);
         StartCoroutine(HideSelf());
     }
     IEnumerator HideSelf()
