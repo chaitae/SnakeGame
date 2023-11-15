@@ -8,11 +8,11 @@ public class SpawnRandomManager : MonoBehaviour
     [SerializeField]
     float maxDistanceFromTarget = 2f;
     [SerializeField]
-    GameObject targetPosition;
+    Vector3 targetPosition;
     [SerializeField]
     GameObject spawnGameObject;
     public static SpawnRandomManager instance;
-    GameObject foodGO;
+    public GameObject foodGO;
 
     private void Awake()
     {
@@ -24,22 +24,12 @@ public class SpawnRandomManager : MonoBehaviour
         {
             GameObject.Destroy(this.gameObject);
         }
+        foodGO.SetActive(true);
     }
     private void Start()
     {
-        GameManager.OnGameStart += OnGameStart;
-        GameManager.OnGameStart += SpawnRandomFood;
-    }
+        SpawnRandomFood();
 
-    private void OnDisable()
-    {
-        GameManager.OnGameStart -= SpawnRandomFood;
-        GameManager.OnGameStart -= OnGameStart;
-    }
-
-    private void OnGameStart()
-    {
-        foodGO = Instantiate(spawnGameObject);
     }
 
     Vector3 GetRandomPosition()
@@ -48,12 +38,18 @@ public class SpawnRandomManager : MonoBehaviour
         float randomDistance = Random.Range(0, maxDistanceFromTarget);
         float randomZ = randomDistance * Mathf.Sin(randomAngle);
         float randomX = randomDistance  * Mathf.Cos(randomAngle);
-        Vector3 randomPos = targetPosition.transform.position +
+        Vector3 randomPos = this.gameObject.transform.position +
             Vector3.right * randomX + Vector3.forward * randomZ;
+
         return randomPos;
     }
     public void SpawnRandomFood()
     {
+
+        if (foodGO == null)
+        {
+            //foodGO = Instantiate(spawnGameObject);
+        }
         Vector3 randomPos = GetRandomPosition();
         while(Vector3.Distance(randomPos,PlayerController.instance.transform.position) <= 4f)
         {
@@ -72,15 +68,15 @@ public class SpawnRandomManager : MonoBehaviour
         for(int i = 1; i <= 20; i++)
         {
             currRadian +=  Mathf.PI/10;
-            float y2 = targetPosition.transform.position.z + maxDistanceFromTarget * Mathf.Sin(currRadian);
-            float x2 = targetPosition.transform.position.x + maxDistanceFromTarget * Mathf.Cos(currRadian);
+            float y2 = targetPosition.z + maxDistanceFromTarget * Mathf.Sin(currRadian);
+            float x2 = targetPosition.x + maxDistanceFromTarget * Mathf.Cos(currRadian);
             //connect with previous one
 
             float prevRadian = currRadian-Mathf.PI/10;
-            float y1 = targetPosition.transform.position.z + maxDistanceFromTarget * Mathf.Sin(prevRadian);
-            float x1 = targetPosition.transform.position.x + maxDistanceFromTarget * Mathf.Cos(prevRadian);
+            float y1 = targetPosition.z + maxDistanceFromTarget * Mathf.Sin(prevRadian);
+            float x1 = targetPosition.x + maxDistanceFromTarget * Mathf.Cos(prevRadian);
 
-            Gizmos.DrawLine(new Vector3(x1, targetPosition.transform.position.y,y1), new Vector3 (x2, targetPosition.transform.position.y, y2));
+            Gizmos.DrawLine(new Vector3(x1, targetPosition.y,y1), new Vector3 (x2, targetPosition.y, y2));
         }
 
     }

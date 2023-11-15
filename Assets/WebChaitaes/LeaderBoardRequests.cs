@@ -6,19 +6,30 @@ using System.Threading;
 using UnityEngine.Events;
 using static System.Net.WebRequestMethods;
 using System.Collections.Generic;
-using UnityEngine.SocialPlatforms.Impl;
+using System.Linq;
 
+[Serializable]
+public class ScoreInfo
+{
+    public string username;
+    public int score;
+    public ScoreInfo(string username, int score)
+    {
+        this.username = username;
+        this.score = score;
+    }
+}
 namespace ChaitaesWeb
 {
     public class LeaderBoardRequests : MonoBehaviour
     {
         string url;
         string username;
-        public Action<List<Tuple<string, int>>> onGetScores;
-        public List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
+        public Action<List<ScoreInfo>> onGetScores;
+        public List<ScoreInfo> scores = new List<ScoreInfo>();
         //below needs to be updated when starting and stopping the server due to not buying an elastic ip address
-        string sendScoreURL = "http://174.129.69.1/chaiLeadearboard/api/scores.php";
-        string getScoreURL = "http://174.129.69.1/chaiLeadearboard/api/scores/add.php";
+        string sendScoreURL = "http://54.221.140.194/leaderboard/public/scores/add";
+        string getScoreURL = "http://54.221.140.194/leaderboard/public/scores";
         public static LeaderBoardRequests instance;
         public bool isLocal = true;
 
@@ -33,10 +44,6 @@ namespace ChaitaesWeb
                 Destroy(gameObject);
             }
         }
-
-
-        [Tooltip("No need for logging in")]
-        public bool isClassicScoreboard = true;
 
         public void UpdateUsername(string username)
         {
@@ -56,10 +63,10 @@ namespace ChaitaesWeb
             }
             else
             {
-                scores.Add(Tuple.Create(username,score));
+                scores.Add(new ScoreInfo(username, score));
             }
         }
-        public List<Tuple<string, int>> GetScore()
+        public List<ScoreInfo> GetScore()
         {
             if(!isLocal)
             {
@@ -75,8 +82,8 @@ namespace ChaitaesWeb
         IEnumerator SendScoreHelper(int score, string urlTemp)
         {
             WWWForm form = new WWWForm();
-            form.AddField("loginUser", username); //this needs to be a field reflected in the php file
-            form.AddField("sentScore", score); //this needs to be a field reflected in the php file
+            form.AddField("username", username); //this needs to be a field reflected in the php file
+            form.AddField("score", score); //this needs to be a field reflected in the php file
             url = sendScoreURL;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(sendScoreURL, form))
             {
@@ -84,7 +91,6 @@ namespace ChaitaesWeb
                 yield return webRequest.SendWebRequest();
                 string[] pages = url.Split('/');
                 int page = pages.Length - 1;
-                Debug.Log(pages[3]);
 
                 switch (webRequest.result)
                 {
@@ -101,6 +107,11 @@ namespace ChaitaesWeb
 
                 }
             }
+        }
+        List<ScoreInfo> ConvertToScoreInfoList(string str)
+        {
+            ScoreInfo[] converted = JsonHelper.FromRawJson<ScoreInfo>(str);
+            return converted.ToList();
         }
         IEnumerator GetScoresHelper(string urlTemp)
         {
@@ -126,26 +137,8 @@ namespace ChaitaesWeb
                     case UnityWebRequest.Result.Success:
                         Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
                         string input = webRequest.downloadHandler.text;
-
-                        string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                        scores.Clear();
-                        foreach (string line in lines)
-                        {
-                            // Split each line into username and score
-                            string[] parts = line.Split(' ');
-
-                            if (parts.Length == 2)
-                            {
-                                string username = parts[0];
-                                int score;
-                                if (int.TryParse(parts[1], out score))
-                                {
-
-                                    scores.Add(new Tuple<string, int>(username, score));
-                                }
-                                //concat it
-                            }
-                        }
+                        ScoreInfo[] converted = JsonHelper.FromRawJson<ScoreInfo>(input);
+                        scores = converted.ToList();
                         onGetScores?.Invoke(scores);
                         break;
 

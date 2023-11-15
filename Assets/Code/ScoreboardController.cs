@@ -16,15 +16,24 @@ public class ScoreboardController : MonoBehaviour
     {
         LeaderBoardRequests.instance.onGetScores += UpdateScoreboard;
     }
-    public void UpdateScoreboard(List<Tuple<string, int>> scores)
+    public void UpdateScoreboard(List<ScoreInfo> scores)
     {
         int rank = 1;
-        foreach (var pair in scores)
+        foreach(var score in scores)
         {
             ScoreItem scoreItem = Instantiate(scorePrefab, scoreParent.transform).GetComponent<ScoreItem>();
-            //scoreItem.gameObject.name = pair.Item1;
-            scoreItem.InsertScoreInfo(pair.Item1, pair.Item2, rank);
+            scoreItem.gameObject.name = score.username;
+            scoreItem.InsertScoreInfo(score.username, score.score, rank);
             rank++;
+
         }
+        //scores.ForEach(score => { });
+        //foreach (var pair in scores)
+        //{
+        //    ScoreItem scoreItem = Instantiate(scorePrefab, scoreParent.transform).GetComponent<ScoreItem>();
+        //    //scoreItem.gameObject.name = pair.Item1;
+        //    scoreItem.InsertScoreInfo(pair.Item1, pair.Item2, rank);
+        //    rank++;
+        //}
     }
 }

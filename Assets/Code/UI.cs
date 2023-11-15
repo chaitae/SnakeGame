@@ -3,26 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Build.Player;
 using UnityEngine;
 using UnityEngine.UIElements;
 [Serializable]
-public struct score
-{
-    public string username;
-    public int points;
-    public score(string username, int points)
-    {
-        this.username = username;
-        this.points = points;
-    }
-}
+
 public class UI : MonoBehaviour
 {
     public static UI instance;
     public UIDocument uiLeaderBoard, uiSubmitScore, uiPauseScreen;
     VisualElement rootLeaderBoard,rootSubmitScore;
-    List<score> scores = new List<score>();
+    List<ScoreInfo> scores = new List<ScoreInfo>();
     [SerializeField]
     VisualTreeAsset ListEntryTemplate;
     [SerializeField]
@@ -99,10 +89,10 @@ public class UI : MonoBehaviour
         }
         FillLeaderboard();
     }
-    List<score> ConvertTupleIntoScore(List<Tuple<string,int>> _scores)
+    List<ScoreInfo> ConvertTupleIntoScore(List<Tuple<string,int>> _scores)
     {
-        List<score> tempScores = new List<score>();
-        _scores.ForEach(n => tempScores.Add(new score(n.Item1,n.Item2)));
+        List<ScoreInfo> tempScores = new List<ScoreInfo>();
+        _scores.ForEach(n => tempScores.Add(new ScoreInfo(n.Item1,n.Item2)));
         return tempScores;
     }
     void FillLeaderboard()
@@ -131,13 +121,14 @@ public class UI : MonoBehaviour
         // Set up bind function for a specific list entry
         ScoreList.bindItem = (item, index) =>
         {
-            (item.userData as ScoreEntryController).SetScoreInfo(scores[index].username, scores[index].points);
+            (item.userData as ScoreEntryController).SetScoreInfo(scores[index].username, scores[index].score);
         };
         LeaderBoardRequests.instance.GetScore();
     }
-    void SetScores(List<Tuple<string, int>> _scores)
+    void SetScores(List<ScoreInfo> scores)
     {
-        scores = ConvertTupleIntoScore(_scores);
+        //scores = ConvertTupleIntoScore(_scores);
+        this.scores = scores;
         ScoreList.itemsSource = scores;
     }
 
