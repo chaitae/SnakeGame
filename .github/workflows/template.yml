@@ -20,7 +20,6 @@ jobs:
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
-          allowDirtyBuild: true
 
       # Test
       - name: Run tests
@@ -39,10 +38,10 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          allowDirtyBuild: true
 
       # Output
       - uses: actions/upload-artifact@v3
         with:
           name: Build
           path: build
-          allowDirtyBuild: true
