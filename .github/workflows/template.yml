@@ -66,17 +66,3 @@ jobs:
        run: ls -R
        working-directory: build/WebGL
 
-     - name: Deploy 🚀
-       uses: JamesIves/github-pages-deploy-action@4.1.4
-       with:
-         branch: itch-io
-         folder: build/WebGL
-         
-     - uses: manleydev/butler-publish-itchio-action@master
-       env:
-         BUTLER_CREDENTIALS: ${{ secrets.ITCH_IO_API_KEY }}
-         CHANNEL: HTML
-         ITCH_GAME: YOUR-ITCH-GAME-NAME
-         ITCH_USER: YOUR-ITCH-USER-NAME
-         BRANCH: itch-io
-         PACKAGE: build/WebGL
