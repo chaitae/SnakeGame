@@ -14,12 +14,13 @@ jobs:
           lfs: true
 
       # # Cache
-      # - uses: actions/cache@v3
-      #   with:
-      #     path: Library
-      #     key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-      #     restore-keys: |
-      #       Library-
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+          allowDirtyBuild: true
 
       # Test
       - name: Run tests
@@ -44,3 +45,4 @@ jobs:
         with:
           name: Build
           path: build
+          allowDirtyBuild: true
