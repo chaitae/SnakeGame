@@ -6,14 +6,12 @@ jobs:
   buildWebGL:
     name: Build for WebGL 🖥️
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./build
     strategy:
       fail-fast: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        run: mkdir -p build/WebGl
 
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
