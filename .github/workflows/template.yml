@@ -2,7 +2,7 @@ name: GameCI Template 🎮
 on: push
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-jobs:         
+jobs:
   buildWebGL:
     name: Build for WebGL 🖥️
     runs-on: ubuntu-latest
@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Set up directory
         run: mkdir -p build/WebGl
 
       - name: Create LFS file list
