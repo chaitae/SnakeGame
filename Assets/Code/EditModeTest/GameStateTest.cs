@@ -10,6 +10,7 @@ public class GameStateTest
     {
         GameObject go = new GameObject();
         PlayerController playerController = go.AddComponent<PlayerController>();
+        playerController.Awake();
         GameManager gameManager = go.AddComponent<GameManager>();
         gameManager.Death();
         Assert.AreEqual(playerController.IsAlive, false);

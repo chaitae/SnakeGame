@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     void OnDeath()
     {
         isAlive = false;
+        Debug.Log("inside on death");
     }
     void Start()
     {
