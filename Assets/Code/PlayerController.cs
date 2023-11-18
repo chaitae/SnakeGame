@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     float segmentOffset = 2f;
     float stepOffset = 1f;
     public GameObject snakeSegment;
-    bool isAlive;
+    bool isAlive = true;
     public bool IsAlive { get { return isAlive; }
         private set { isAlive = value; }
     }
